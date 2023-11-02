@@ -64,7 +64,7 @@ public class Proj04Runner {
     //uses a treeSet to sort then mutates the array passed in
     public Object[] runA(Object[] list){
     // initialize treeSet with TheComparator01
-        TreeSet tSet = new TreeSet(new TheComparator01());
+        TreeSet tSet = new TreeSet(new TheAscendingComparator());
         int aSize = list.length;
         for (int i=0; i < aSize; i++){
             tSet.add(list[i]);
@@ -82,13 +82,12 @@ public class Proj04Runner {
     }//end runA()
 
     //takes in a list and creates a treeSet in case-insensitive reverse alphabetical order
-    public String[] runB(String[] list){
-    TreeSet tSet = new TreeSet(new TheComparator02());
-    //add all elements of list array to TreeSet for processing
-    tSet.addAll(Arrays.asList(list));
-    //add processed tSet to an array to return back to caller
-    String[] finalResult = new String[tSet.size()];
-    tSet.toArray(finalResult);
+    public Collection runB(){
+    TreeSet<String> tSet = new TreeSet<>(new TheDescendingComparator());
+    tSet.addAll(this.intermediateList);
+
+    Collection<String> finalResult = new ArrayList<>();
+    finalResult = tSet;
 
     return finalResult;
 
@@ -121,7 +120,7 @@ public class Proj04Runner {
 //    }//end compare()
 //} //end TheComparator01
 
-class TheComparator01 implements Comparator, Serializable {
+class TheAscendingComparator implements Comparator, Serializable {
 
     //comparator class for Intermediate Results
     public int compare(Object o1, Object o2) {
@@ -140,7 +139,7 @@ class TheComparator01 implements Comparator, Serializable {
     }//end compare()
 }//end TheComparator02
 
-class TheComparator02 implements Comparator, Serializable {
+class TheDescendingComparator implements Comparator, Serializable {
 
     //comparator class for Intermediate Results
     public int compare(Object o1, Object o2) {
@@ -150,7 +149,7 @@ class TheComparator02 implements Comparator, Serializable {
             throw new ClassCastException();
 
         //Do an upper-case comparison
-        int result = ((String)o1).compareToIgnoreCase((String)o2);
+        int result = ((String)o1).compareTo((String)o2);
         //returns comparison is descending alphabetical order
         return -(result);
     }//end compare()
