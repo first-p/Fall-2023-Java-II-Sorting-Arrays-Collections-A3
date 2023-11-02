@@ -5,10 +5,10 @@ import java.util.Objects;
 
 //Declare a public class that implements the Comparator interface for which a compare()
 // implementation will compare strings
-public class Proj03Runner implements Comparator<String>{
+public class Proj04Runner implements Comparator<String>{
     String name = "";
 
-    public Proj03Runner(){//overloaded constructor
+    public Proj04Runner(){//overloaded constructor
         //The purpose of this constructor is to display
         // the certification.
         System.out.println(
@@ -19,7 +19,7 @@ public class Proj03Runner implements Comparator<String>{
     }//end overloaded constructor
 
     //Overloaded constructor that takes only String values
-    public Proj03Runner(String name){
+    public Proj04Runner(String name){
         this.name = name;
     } //end overloaded constructor
 
@@ -62,6 +62,16 @@ public class Proj03Runner implements Comparator<String>{
     public int compare(String o1, String o2){
         return -(o1.compareToIgnoreCase(o2));
     } //end compare method
+
+    //takes in a list and creates a treeSet in alphabetical order disregarding case
+    public String runA(String[] list){
+
+    }
+
+    //takes in a list and creates a treeSet in descending case reverse alphabetical order
+    public String runB(String[] list){
+
+    }
 
 }//end class Proj02Runner
 
