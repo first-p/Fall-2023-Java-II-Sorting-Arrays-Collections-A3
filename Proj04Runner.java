@@ -7,6 +7,8 @@ import java.util.*;
 // implementation will compare strings
 public class Proj04Runner {
     String name = "";
+    //stored list for use in further processing
+    ArrayList<String> intermediateList= new ArrayList<>();
 
     public Proj04Runner(){//overloaded constructor
         //The purpose of this constructor is to display
@@ -15,6 +17,7 @@ public class Proj04Runner {
                 "I certify that this program is my own work \n"+
                         "and is not the work of others. I agree not \n" +
                         "to share my solution with others.\n" +
+                        "I've used ChatGPT to understand intricacies of Java \n" +
                         "Fred Butoma\n");
     }//end overloaded constructor
 
@@ -57,61 +60,68 @@ public class Proj04Runner {
     }//end toString()
 
 
-//    //Implement compare from the Comparator Interface to compare strings and store them in descending order
-//    @Override
-//    public int compare(String o1, String o2){
-//        return -(o1.compareToIgnoreCase(o2));
-//    } //end compare method
-
     //intermediate list is sorted in case-insensitive alphabetical order
     //uses a treeSet to sort then mutates the array passed in
-    public String[] runA(Object[] list){
-    // initialize treeSet with TheComparator
-        TreeSet tSet= new TreeSet(new TheComparator01());
-        tSet = new TreeSet(new TheComparator02());
+    public Object[] runA(Object[] list){
+    // initialize treeSet with TheComparator01
+        TreeSet tSet = new TreeSet(new TheComparator01());
         int aSize = list.length;
         for (int i=0; i < aSize; i++){
             tSet.add(list[i]);
         }//end for loop
 
         //create new array using the treeSet
-        String[] intermediateList = new String[tSet.size()];
-       tSet.toArray(intermediateList);
+        Object[] intermediateList = tSet.toArray();
+
+        //store the intermediateList in this instance for further processing
+        for (Object element : intermediateList){
+            this.intermediateList.add((String)element);
+        }//end for loop
 
        return intermediateList;
     }//end runA()
 
-    //takes in a list and creates a treeSet in descending case reverse alphabetical order
-//    public String runB(String[] list){
-//
-//    }//end runB()
+    //takes in a list and creates a treeSet in case-insensitive reverse alphabetical order
+    public String[] runB(String[] list){
+    TreeSet tSet = new TreeSet(new TheComparator02());
+    //add all elements of list array to TreeSet for processing
+    tSet.addAll(Arrays.asList(list));
+    //add processed tSet to an array to return back to caller
+    String[] finalResult = new String[tSet.size()];
+    tSet.toArray(finalResult);
+
+    return finalResult;
+
+
+    }//end runB()
 
 }//end class Proj02Runner
 
+//class TheComparator01 implements Comparator, Serializable {
+//
+//    //comparator class for Intermediate Results
+//    public int compare(Object o1, Object o2) {
+//        if (!(o1 instanceof String))
+//            throw new ClassCastException();
+//        if (!(o2 instanceof String))
+//            throw new ClassCastException();
+//
+//        //Do an upper-case comparison
+//        int result;
+//        boolean o1IsLower = Character.isLowerCase(((String) o1).charAt(0));
+//        boolean o2IsLower = Character.isLowerCase(((String) o2).charAt(0));
+//        //if the second string is capitalized and first is not, first string goes first
+//        if (o1IsLower && !o2IsLower) { result = -1;}
+//       //if the first string is capitalized and the second isn't, second string goes first
+//        else if (!o1IsLower && o2IsLower) { result = 1;}
+//        //otherwise both strings are either both capitalized or not capitalized
+//        else { result = ((String) o1).compareToIgnoreCase(((String) o2));}
+//
+//        return result;
+//    }//end compare()
+//} //end TheComparator01
+
 class TheComparator01 implements Comparator, Serializable {
-
-    //comparator class for Intermediate Results
-    public int compare(Object o1, Object o2) {
-        if (!(o1 instanceof String))
-            throw new ClassCastException();
-        if (!(o2 instanceof String))
-            throw new ClassCastException();
-
-        //Do an upper-case comparison
-        int result;
-        boolean o1IsLower = Character.isLowerCase(((String) o1).charAt(0));
-        boolean o2IsLower = Character.isLowerCase(((String) o2).charAt(0));
-        //if the second string is capitalized and first is not, first string goes first
-        if (o1IsLower && !o2IsLower) { result = -1;}
-       //if the first string is capitalized and the second isn't, second string goes first
-        else if (!o1IsLower && o2IsLower) { result = 1;}
-        //otherwise both strings are either both capitalized or not capitalized
-        else { result = ((String) o1).compareToIgnoreCase(((String) o2));}
-
-        return result;
-    }//end compare()
-}
-class TheComparator02 implements Comparator, Serializable {
 
     //comparator class for Intermediate Results
     public int compare(Object o1, Object o2) {
@@ -128,4 +138,20 @@ class TheComparator02 implements Comparator, Serializable {
 
         return result;
     }//end compare()
-}
+}//end TheComparator02
+
+class TheComparator02 implements Comparator, Serializable {
+
+    //comparator class for Intermediate Results
+    public int compare(Object o1, Object o2) {
+        if (!(o1 instanceof String))
+            throw new ClassCastException();
+        if (!(o2 instanceof String))
+            throw new ClassCastException();
+
+        //Do an upper-case comparison
+        int result = ((String)o1).compareToIgnoreCase((String)o2);
+        //returns comparison is descending alphabetical order
+        return -(result);
+    }//end compare()
+}//end TheComparator02
