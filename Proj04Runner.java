@@ -1,11 +1,11 @@
 
 
-import java.util.Comparator;
-import java.util.Objects;
+import java.io.Serializable;
+import java.util.*;
 
 //Declare a public class that implements the Comparator interface for which a compare()
 // implementation will compare strings
-public class Proj04Runner implements Comparator<String>{
+public class Proj04Runner {
     String name = "";
 
     public Proj04Runner(){//overloaded constructor
@@ -26,7 +26,7 @@ public class Proj04Runner implements Comparator<String>{
     //Getter method for the String Value
     public String getName(){
         return name;
-    }//end getter method
+    }//end getName()
 
     //Override the equals method to provide consistent behavior when
     //there are duplicate strings
@@ -39,7 +39,7 @@ public class Proj04Runner implements Comparator<String>{
             equals = this.equals(obj);
         }
         return equals;
-    } // end method
+    } // end equals method
 
     //Override the HashCode method as it is recommended when overriding
     //the equals method to ensure that duplicate elements have identical
@@ -48,30 +48,84 @@ public class Proj04Runner implements Comparator<String>{
     @Override
     public int hashCode() {
         return Objects.hash(name);
-    }//end method
+    }//end hashCode()
 
     //Override the toString method in order to display a meaningful string representation
     @Override
     public String toString() {
         return name;
-    }//end method
+    }//end toString()
 
 
-    //Implement compare from the Comparator Interface to compare strings and store them in descending order
-    @Override
-    public int compare(String o1, String o2){
-        return -(o1.compareToIgnoreCase(o2));
-    } //end compare method
+//    //Implement compare from the Comparator Interface to compare strings and store them in descending order
+//    @Override
+//    public int compare(String o1, String o2){
+//        return -(o1.compareToIgnoreCase(o2));
+//    } //end compare method
 
-    //takes in a list and creates a treeSet in alphabetical order disregarding case
-    public String runA(String[] list){
+    //intermediate list is sorted in case-insensitive alphabetical order
+    //uses a treeSet to sort then mutates the array passed in
+    public String[] runA(Object[] list){
+    // initialize treeSet with TheComparator
+        TreeSet tSet= new TreeSet(new TheComparator01());
+        tSet = new TreeSet(new TheComparator02());
+        int aSize = list.length;
+        for (int i=0; i < aSize; i++){
+            tSet.add(list[i]);
+        }//end for loop
 
-    }
+        //create new array using the treeSet
+        String[] intermediateList = new String[tSet.size()];
+       tSet.toArray(intermediateList);
+
+       return intermediateList;
+    }//end runA()
 
     //takes in a list and creates a treeSet in descending case reverse alphabetical order
-    public String runB(String[] list){
-
-    }
+//    public String runB(String[] list){
+//
+//    }//end runB()
 
 }//end class Proj02Runner
 
+class TheComparator01 implements Comparator, Serializable {
+
+    //comparator class for Intermediate Results
+    public int compare(Object o1, Object o2) {
+        if (!(o1 instanceof String))
+            throw new ClassCastException();
+        if (!(o2 instanceof String))
+            throw new ClassCastException();
+
+        //Do an upper-case comparison
+        int result;
+        boolean o1IsLower = Character.isLowerCase(((String) o1).charAt(0));
+        boolean o2IsLower = Character.isLowerCase(((String) o2).charAt(0));
+        //if the second string is capitalized and first is not, first string goes first
+        if (o1IsLower && !o2IsLower) { result = -1;}
+       //if the first string is capitalized and the second isn't, second string goes first
+        else if (!o1IsLower && o2IsLower) { result = 1;}
+        //otherwise both strings are either both capitalized or not capitalized
+        else { result = ((String) o1).compareToIgnoreCase(((String) o2));}
+
+        return result;
+    }//end compare()
+}
+class TheComparator02 implements Comparator, Serializable {
+
+    //comparator class for Intermediate Results
+    public int compare(Object o1, Object o2) {
+        if (!(o1 instanceof String))
+            throw new ClassCastException();
+        if (!(o2 instanceof String))
+            throw new ClassCastException();
+
+        //Do an upper-case comparison
+         int result = ((String)o1).compareToIgnoreCase((String)o2);
+
+        //makes result reverse alphabetical order
+        //result * (-1);
+
+        return result;
+    }//end compare()
+}
